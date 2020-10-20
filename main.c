@@ -337,15 +337,15 @@ void tLED(void *argument) {
 
 void tAudio(void *argument) {
 	int counter = 0;
-	int n_notes = sizeof(game_over) / sizeof(int);
+	int n_notes = sizeof(melody) / sizeof(int);
 	const int ps = 128;
 	
 	while (1) {
 		counter = counter % n_notes;
-	  int pwm_period = pwn_calculate_period(CLOCK_FREQ, game_over[counter], ps); 
-    int pwm_duty_cycle = pwm_calculate_duty_cycle(CLOCK_FREQ, game_over[counter], ps, 0.1); 
+	  int pwm_period = pwn_calculate_period(CLOCK_FREQ, melody[counter], ps); 
+    int pwm_duty_cycle = pwm_calculate_duty_cycle(CLOCK_FREQ, melody[counter], ps, 0.1); 
 		pwm_init(pwm_period, pwm_duty_cycle);
-		int noteDuration = 1000 / game_over_tempo[counter];
+		int noteDuration = 1000 / tempo[counter];
 		int pauseBetweenNotes = noteDuration * 1.30;
     osDelay(pauseBetweenNotes);
 		counter += 1;
