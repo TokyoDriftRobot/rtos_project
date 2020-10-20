@@ -10,12 +10,6 @@
 volatile robot_state_t ROBOT_STATE = ROBOT_STATE_INIT;
 volatile robot_direction_t ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
 
-#define BAUD_RATE 9600
-#define UART_TX_PORTE22 22
-#define UART_RX_PORTE23 23
-#define UART2_INT_PRIO 128
-
-
 void tBrain(void *argument) {
 	bluetooth_init(BAUD_RATE);
 	while(1);

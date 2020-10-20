@@ -55,8 +55,8 @@
 #define LED_PTE5 5 // left motor
 #define LED_PTE20 20 // right motor
 #define LED_PTE21 21 // right motor
-#define LED_PTE22 22
-#define LED_PTE23 23
+#define LED_PTE22 22 // uart tx pin
+#define LED_PTE23 23 // uart rx pin
 #define LED_PTE29 29 // red led
 #define LED_PTE30 30 // red led
 
