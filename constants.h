@@ -1,9 +1,9 @@
 // port a pins
-#define LED_PTA1 1
-#define LED_PTA2 2
-#define LED_PTA4 4
-#define LED_PTA5 5
-#define LED_PTA12 12
+#define LED_PTA1 1 // green led
+#define LED_PTA2 2 // green led
+#define LED_PTA4 4 // green led
+#define LED_PTA5 5 // green led
+#define LED_PTA12 12 // green led
 #define LED_PTA13 13
 #define LED_PTA16 16
 #define LED_PTA17 17
@@ -19,16 +19,16 @@
 #define LED_PTB11 11 // red led
 
 // port c pins
-#define LED_PTC0 0
+#define LED_PTC0 0 // green led
 #define LED_PTC1 1 // red led
 #define LED_PTC2 2 // red led
-#define LED_PTC3 3
+#define LED_PTC3 3 // green led
 #define LED_PTC4 4
 #define LED_PTC5 5
 #define LED_PTC6 6
 #define LED_PTC7 7
-#define LED_PTC8 8
-#define LED_PTC9 9
+#define LED_PTC8 8 // green led
+#define LED_PTC9 9 // gteen led
 #define LED_PTC10 10
 #define LED_PTC11 11
 #define LED_PTC12 12
@@ -41,7 +41,7 @@
 #define LED_PTD1 1
 #define LED_PTD2 2
 #define LED_PTD3 3
-#define LED_PTD4 4
+#define LED_PTD4 4 // green led
 #define LED_PTD5 5
 #define LED_PTD6 6
 #define LED_PTD7 7

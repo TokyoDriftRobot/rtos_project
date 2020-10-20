@@ -46,140 +46,59 @@ void green_led_init() {
 	PTC->PDDR |= MASK(LED_PTC0);
 	
 	// Turn off leds
-	PTA->PDOR &= ~MASK(LED_PTA1);
-	PTA->PDOR &= ~MASK(LED_PTA2);
-	PTD->PDOR &= ~MASK(LED_PTD4);
-	PTA->PDOR &= ~MASK(LED_PTA12);
-	PTA->PDOR &= ~MASK(LED_PTA4);
-	PTA->PDOR &= ~MASK(LED_PTA5);
-	PTC->PDOR &= ~MASK(LED_PTC8);
-	PTC->PDOR &= ~MASK(LED_PTC9);
-	PTC->PDOR &= ~MASK(LED_PTC3);
-	PTC->PDOR &= ~MASK(LED_PTC0);
+	green_led_running(-1);
 }
 
 void green_led_running(int counter) {
 	if (counter == 0) {
 	  PTA->PDOR |= MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 1) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR |= MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 2) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR |= MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 3) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR |= MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 4) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR |= MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 5) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR |= MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 6) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR |= MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 7) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR |= MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 8) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR |= MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
-	} else if (counter == 9) {
-	  PTA->PDOR &= ~MASK(LED_PTA1);
-	  PTA->PDOR &= ~MASK(LED_PTA2);
-	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
-	  PTA->PDOR &= ~MASK(LED_PTA4);
-	  PTA->PDOR &= ~MASK(LED_PTA5);
-	  PTC->PDOR &= ~MASK(LED_PTC8);
-	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR |= MASK(LED_PTC0);
 	} else {
 	  PTA->PDOR &= ~MASK(LED_PTA1);
+	}
+  if (counter == 1) {
+	  PTA->PDOR |= MASK(LED_PTA2);
+	} else {
 	  PTA->PDOR &= ~MASK(LED_PTA2);
+	}
+	if (counter == 2) {
+	  PTD->PDOR |= MASK(LED_PTD4);
+	} else {
 	  PTD->PDOR &= ~MASK(LED_PTD4);
-	  PTA->PDOR &= ~MASK(LED_PTA12);
+	}
+	if (counter == 3) {
+	  PTA->PDOR |= MASK(LED_PTA12);
+	} else {
+		PTA->PDOR &= ~MASK(LED_PTA12);
+	}
+	if (counter == 4) {
+	  PTA->PDOR |= MASK(LED_PTA4);
+	} else {
 	  PTA->PDOR &= ~MASK(LED_PTA4);
+	}
+	if (counter == 5) {
+	  PTA->PDOR |= MASK(LED_PTA5);
+	} else {
 	  PTA->PDOR &= ~MASK(LED_PTA5);
+	}
+	if (counter == 6) {
+	  PTC->PDOR |= MASK(LED_PTC8);
+	} else {
 	  PTC->PDOR &= ~MASK(LED_PTC8);
+	}
+	if (counter == 7) {
+		PTC->PDOR |= MASK(LED_PTC9);
+	} else {
 	  PTC->PDOR &= ~MASK(LED_PTC9);
-	  PTC->PDOR &= ~MASK(LED_PTC3);
-	  PTC->PDOR &= ~MASK(LED_PTC0);
+	}
+	if (counter == 8) {
+		PTC->PDOR |= MASK(LED_PTC3);
+	} else {
+		PTC->PDOR &= ~MASK(LED_PTC3);
+	}
+	if (counter == 9) {
+		PTC->PDOR |= MASK(LED_PTC0);
+	} else {
+		PTC->PDOR &= ~MASK(LED_PTC0);
 	}
 }
 
