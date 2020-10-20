@@ -5,11 +5,19 @@
 #include "audio.h"
 #include "led.h"
 #include "motor.h"
+#include "bluetooth.h"
 
-robot_state_t ROBOT_STATE = ROBOT_STATE_MOVE;
-robot_direction_t ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD;
+volatile robot_state_t ROBOT_STATE = ROBOT_STATE_INIT;
+volatile robot_direction_t ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
+
+#define BAUD_RATE 9600
+#define UART_TX_PORTE22 22
+#define UART_RX_PORTE23 23
+#define UART2_INT_PRIO 128
+
 
 void tBrain(void *argument) {
+	bluetooth_init(BAUD_RATE);
 	while(1);
 }
 
@@ -50,10 +58,20 @@ void tGreenLED(void *argument) {
 
 void tAudio(void *argument) {
 	int counter = 0;
-	int n_notes = MAIN_THEME_SIZE;
+	int n_notes = UNDERWORLD_SIZE;
 	const float dc = 0.1;
 	
 	while (1) {
+		if (ROBOT_STATE == ROBOT_STATE_INIT) {
+			continue;
+		} else if (ROBOT_STATE == ROBOT_STATE_START) {
+		  n_notes = UNDERWORLD_SIZE;
+		} else if (ROBOT_STATE == ROBOT_STATE_END) {
+			n_notes = GAME_OVER_SIZE;
+		} else {
+			n_notes = MAIN_THEME_SIZE;
+		}
+		
 		counter = counter % n_notes;
 		int pause_between_notes = 0;
 		if (ROBOT_STATE == ROBOT_STATE_START) {
@@ -63,12 +81,15 @@ void tAudio(void *argument) {
 		} else {
 			pause_between_notes = play_main_theme(counter, dc);
 		}
+		
     osDelay(pause_between_notes);
 		counter += 1;
 	}
 }
 
 void clock_gating_init() {
+	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK;
+	
 	SIM->SCGC5 |= (
 		(SIM_SCGC5_PORTA_MASK) |
 		(SIM_SCGC5_PORTB_MASK) | 

@@ -62,6 +62,7 @@
 
 // robot states
 typedef enum {
+	ROBOT_STATE_INIT,
 	ROBOT_STATE_STOP,
 	ROBOT_STATE_MOVE,
 	ROBOT_STATE_START,
@@ -74,8 +75,8 @@ typedef enum {
 	ROBOT_DIRECTION_BACKWARD
 } robot_direction_t;
 
-extern robot_state_t ROBOT_STATE;
-extern robot_direction_t ROBOT_DIRECTION;
+extern volatile robot_state_t ROBOT_STATE;
+extern volatile robot_direction_t ROBOT_DIRECTION;
 
 // debugging
 #define LED_RED_PIN 18 
