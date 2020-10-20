@@ -4,16 +4,20 @@
 #include "constants.h"
 #include "audio.h"
 #include "led.h"
+#include "motor.h"
 
-
-robot_state_t ROBOT_STATE = ROBOT_STATE_STOP;
+robot_state_t ROBOT_STATE = ROBOT_STATE_MOVE;
+robot_direction_t ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD;
 
 void tBrain(void *argument) {
 	while(1);
 }
 
 void tMotorControl(void *argument) {
-	while(1);
+	motor_init();
+	while(1) {
+		motor_control();
+	};
 }
 
 void tRedLED(void *argument) {
@@ -34,10 +38,10 @@ void tGreenLED(void *argument) {
 	while(1) {
 		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
 		  green_led_running();
-		  osDelay(RED_LED_MOVE_DELAY);
+		  osDelay(GREEN_LED_DELAY);
 		} else {
 		  green_led_on();
-		  osDelay(RED_LED_STOP_DELAY);
+		  osDelay(GREEN_LED_DELAY);
 		}
 	};
 }

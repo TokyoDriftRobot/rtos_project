@@ -51,10 +51,10 @@
 #define LED_PTE1 1
 #define LED_PTE2 2
 #define LED_PTE3 3
-#define LED_PTE4 4
-#define LED_PTE5 5
-#define LED_PTE20 20
-#define LED_PTE21 21
+#define LED_PTE4 4 // left motor
+#define LED_PTE5 5 // left motor
+#define LED_PTE20 20 // right motor
+#define LED_PTE21 21 // right motor
 #define LED_PTE22 22
 #define LED_PTE23 23
 #define LED_PTE29 29
@@ -67,9 +67,15 @@ typedef enum {
 	ROBOT_STATE_START,
 	ROBOT_STATE_END,
 } robot_state_t;
+typedef enum {
+	ROBOT_DIRECTION_LEFT,
+	ROBOT_DIRECTION_RIGHT,
+	ROBOT_DIRECTION_FORWARD,
+	ROBOT_DIRECTION_BACKWARD
+} robot_direction_t;
 
 extern robot_state_t ROBOT_STATE;
-
+extern robot_direction_t ROBOT_DIRECTION;
 // debugging
 #define LED_RED_PIN 18 
 #define LED_GREEN_PIN 19 
