@@ -1,124 +1,122 @@
 #include <MKL25Z4.h> 
 #include <RTE_Components.h>
 #include <cmsis_os2.h>
+#include "constants.h"
+#include "audio.h"
+#include "led.h"
+#include "motor.h"
+#include "bluetooth.h"
 
-#define MASK(x) (1 << (x))
+volatile robot_state_t ROBOT_STATE = ROBOT_STATE_INIT;
+volatile robot_direction_t ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
 
-#define LED_PTA1 1
-#define LED_PTA2 2
-#define LED_PTA4 4
-#define LED_PTA5 5
-#define LED_PTA12 12
-#define LED_PTA13 13
-#define LED_PTA16 16
-#define LED_PTA17 17
-
-#define LED_PTB0 0
-#define LED_PTB1 1
-#define LED_PTB2 2
-#define LED_PTB3 3
-#define LED_PTB8 8
-#define LED_PTB9 9
-#define LED_PTB10 10
-#define LED_PTB11 11
-
-#define LED_PTC0 0
-#define LED_PTC1 1 
-#define LED_PTC2 2
-#define LED_PTC3 3
-#define LED_PTC4 4
-#define LED_PTC5 5
-#define LED_PTC6 6
-#define LED_PTC7 7
-#define LED_PTC8 8
-#define LED_PTC9 9
-#define LED_PTC10 10
-#define LED_PTC11 11
-#define LED_PTC12 12
-#define LED_PTC13 13
-#define LED_PTC16 16
-#define LED_PTC17 17
-
-#define LED_PTD0 0
-#define LED_PTD1 1
-#define LED_PTD2 2
-#define LED_PTD3 3
-#define LED_PTD4 4
-#define LED_PTD5 5
-#define LED_PTD6 6
-#define LED_PTD7 7
-
-#define LED_PTE0 0
-#define LED_PTE1 1
-#define LED_PTE2 2
-#define LED_PTE3 3
-#define LED_PTE4 4
-#define LED_PTE5 5
-#define LED_PTE20 20
-#define LED_PTE21 21
-#define LED_PTE22 22
-#define LED_PTE23 23
-#define LED_PTE29 29
-#define LED_PTE30 30
-
-// LEDs for debugging
-#define LED_PTB18 18
-#define LED_PTB19 19
-#define LED_PTD1 1
-
-
-typedef enum {
-    LED_RED_COLOR,
-    LED_BLUE_COLOR,
-    LED_GREEN_COLOR,
-} color_t;
-
-
-void led_init_gpio(void) {
-	// Enable Clock to PORTB and PORTD
-	SIM->SCGC5 |= ((SIM_SCGC5_PORTB_MASK) | (SIM_SCGC5_PORTD_MASK));
-	// Configure MUX settings to make all 3 pins GPIO
-	PORTB->PCR[LED_PTB18] &= ~PORT_PCR_MUX_MASK;
-	PORTB->PCR[LED_PTB18] |= PORT_PCR_MUX(1);
-	PORTB->PCR[LED_PTB19] &= ~PORT_PCR_MUX_MASK;
-	PORTB->PCR[LED_PTB19] |= PORT_PCR_MUX(1);
-	PORTD->PCR[LED_PTD1] &= ~PORT_PCR_MUX_MASK;
-	PORTD->PCR[LED_PTD1] |= PORT_PCR_MUX(1);
-	// Set Data Direction Registers for PortB and PortD
-	PTB->PDDR |= (MASK(LED_PTB18) | MASK(LED_PTB19));
-	PTD->PDDR |= MASK(LED_PTD1);
+void tBrain(void *argument) {
+	bluetooth_init(BAUD_RATE);
+	while(1);
 }
 
-void led_off_rgb() {
-	PTD->PDOR = MASK(LED_PTD1);
-	PTB->PDOR = (MASK(LED_PTB18) | MASK(LED_PTD1)); 
+void tMotorControl(void *argument) {
+	motor_init();
+	while(1) {
+		motor_control();
+	};
 }
 
-void led_red_thread(void *argument) {
-	for (;;) {
-		PTB->PDOR |= (MASK(LED_PTB18));
-		osDelay(1000);
-		PTB->PDOR &= (~MASK(LED_PTB18));
-		osDelay(1000);
+void tRedLED(void *argument) {
+	red_led_init();
+	while(1) {
+		red_led_toggle();
+		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+		  osDelay(RED_LED_MOVE_DELAY);
+		} else {
+		  osDelay(RED_LED_STOP_DELAY);
+		}
+	};
+}
+
+void tGreenLED(void *argument) {
+	green_led_init();
+	int counter = 0;
+	while(1) {
+		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+			counter = counter % 10;
+		  green_led_running(counter);
+			counter += 1;
+		} else {
+		  green_led_on();
+			counter = 0;
+		}
+		osDelay(GREEN_LED_DELAY);
+	};
+}
+
+void tAudio(void *argument) {
+	int counter = 0;
+	int n_notes = UNDERWORLD_SIZE;
+	const float dc = 0.1;
+	
+	while (1) {
+		if (ROBOT_STATE == ROBOT_STATE_INIT) {
+			continue;
+		} else if (ROBOT_STATE == ROBOT_STATE_START) {
+		  n_notes = UNDERWORLD_SIZE;
+		} else if (ROBOT_STATE == ROBOT_STATE_END) {
+			n_notes = GAME_OVER_SIZE;
+		} else {
+			n_notes = MAIN_THEME_SIZE;
+		}
+		
+		counter = counter % n_notes;
+		int pause_between_notes = 0;
+		if (ROBOT_STATE == ROBOT_STATE_START) {
+			pause_between_notes = play_underworld(counter, dc);
+		} else if (ROBOT_STATE == ROBOT_STATE_END) {
+			pause_between_notes = play_game_over(counter, dc);
+		} else {
+			pause_between_notes = play_main_theme(counter, dc);
+		}
+		
+    osDelay(pause_between_notes);
+		counter += 1;
 	}
 }
 
-void led_green_thread(void *argument) {
-	for (;;) {
-		PTB->PDOR |= (MASK(LED_PTB19));
-		osDelay(1000);
-		PTB->PDOR &= (~MASK(LED_PTB19));
-		osDelay(1000);
-	}
+void clock_gating_init() {
+	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK;
+	
+	SIM->SCGC5 |= (
+		(SIM_SCGC5_PORTA_MASK) |
+		(SIM_SCGC5_PORTB_MASK) | 
+		(SIM_SCGC5_PORTC_MASK) | 
+		(SIM_SCGC5_PORTD_MASK) |
+		(SIM_SCGC5_PORTE_MASK) 
+	);
+}
+
+void timer_gating_init () {
+	/* select mcgfliclk as timer counter clock */
+	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
+	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
+	
+	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;
+	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;  
+	SIM->SCGC6 |= SIM_SCGC6_TPM2_MASK;  
+	
+  SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
 }
 
 int main(void) {
 	SystemCoreClockUpdate();
-	led_init_gpio();
-	led_off_rgb();
+	clock_gating_init();
+	timer_gating_init();
 	osKernelInitialize();
-	osThreadNew(led_red_thread, NULL, NULL);
-	osThreadNew(led_green_thread, NULL, NULL);
+	
+	osThreadNew(tBrain, NULL, NULL);
+	osThreadNew(tMotorControl, NULL, NULL);
+	osThreadNew(tRedLED, NULL, NULL);
+	osThreadNew(tGreenLED, NULL, NULL);
+	osThreadNew(tAudio, NULL, NULL);
+	
 	osKernelStart();
 	while(1);
 }
