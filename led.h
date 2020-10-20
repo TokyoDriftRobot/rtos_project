@@ -1,0 +1,9 @@
+#define RED_LED_MOVE_DELAY 500
+#define RED_LED_STOP_DELAY 250
+#define GREEN_LED_DELAY 100
+
+void green_led_init(void);
+void green_led_running(void);
+void green_led_on(void);
+void red_led_init(void);
+void red_led_toggle(void);

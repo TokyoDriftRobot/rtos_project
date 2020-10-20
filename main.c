@@ -3,6 +3,10 @@
 #include <cmsis_os2.h>
 #include "constants.h"
 #include "audio.h"
+#include "led.h"
+
+
+robot_state_t ROBOT_STATE = ROBOT_STATE_STOP;
 
 void tBrain(void *argument) {
 	while(1);
@@ -12,8 +16,30 @@ void tMotorControl(void *argument) {
 	while(1);
 }
 
-void tLED(void *argument) {
-	while(1);
+void tRedLED(void *argument) {
+	red_led_init();
+	while(1) {
+		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+		  red_led_toggle();
+		  osDelay(RED_LED_MOVE_DELAY);
+		} else {
+		  red_led_toggle();
+		  osDelay(RED_LED_STOP_DELAY);
+		}
+	};
+}
+
+void tGreenLED(void *argument) {
+	green_led_init();
+	while(1) {
+		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+		  green_led_running();
+		  osDelay(RED_LED_MOVE_DELAY);
+		} else {
+		  green_led_on();
+		  osDelay(RED_LED_STOP_DELAY);
+		}
+	};
 }
 
 void tAudio(void *argument) {
@@ -29,14 +55,44 @@ void tAudio(void *argument) {
 	}
 }
 
+// Supply power to ports
+void clock_gating_init() {
+	SIM->SCGC5 |= (
+		(SIM_SCGC5_PORTA_MASK) |
+		(SIM_SCGC5_PORTB_MASK) | 
+		(SIM_SCGC5_PORTC_MASK) | 
+		(SIM_SCGC5_PORTD_MASK) |
+		(SIM_SCGC5_PORTE_MASK) 
+	);
+}
+
+// Supply power to timers
+void timer_gating_init () {
+	/* Select MCGFLLCLK as timer counter clock */
+	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
+	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
+	
+  /* Enable clock to TPM0 */
+	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;
+	/* Enable clock to TPM1 */
+	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;  
+	/* Enable clock to TPM1 */
+	SIM->SCGC6 |= SIM_SCGC6_TPM2_MASK;  
+	
+  /* Enable clock to PIT */	
+  SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
+}
 
 int main(void) {
 	SystemCoreClockUpdate();
+	clock_gating_init();
+	timer_gating_init();
 	osKernelInitialize();
 	
 	osThreadNew(tBrain, NULL, NULL);
 	osThreadNew(tMotorControl, NULL, NULL);
-	osThreadNew(tLED, NULL, NULL);
+	osThreadNew(tRedLED, NULL, NULL);
+	osThreadNew(tGreenLED, NULL, NULL);
 	osThreadNew(tAudio, NULL, NULL);
 	
 	osKernelStart();

@@ -119,66 +119,51 @@ int game_over_tempo [GAME_OVER_SIZE] = {
 };
 
 
-int calculate_audio_period(int clock, int freq, int ps) {
+int calculate_audio_period(
+	int clock, int freq, int ps) {
 	return clock / (freq * ps);
 }  
 
-int calculate_audio_duty_cycle(int clock, int freq, int ps, float dc) {
+int calculate_audio_duty_cycle(
+	int clock, int freq, int ps, float dc) {
 	return (int) (dc * (clock / (freq * ps)));
 }  
 
-// tpm1 for audio
-void audio_init(int pwn_period, int pwm_duty_cycle) {
-	/* Enable clock on PTB */
-	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK;
-	
-	/* Select PTB0 to connect to TPM */
+void audio_init(int pwn_period, int pwm_duty_cycle) {	
+	// Enable pwm for pin
 	PORTB->PCR[LED_PTB0] &= ~PORT_PCR_MUX_MASK;
 	PORTB->PCR[LED_PTB0] |= PORT_PCR_MUX(3);
-	
-	/* Select PTB1 to connect to TPM */
-	PORTB->PCR[LED_PTB1] &= ~PORT_PCR_MUX_MASK;
-	PORTB->PCR[LED_PTB1] |= PORT_PCR_MUX(3);	
 
-  /* Enable clock to TPM1 */
-	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;
-	
-	/* Select MCGFLLCLK as timer counter clock */
-	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
-	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
-
-	/* Disable timer while configuring */
-	TPM1->SC &= ~((TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK));
-	
-	/* Select prescaler for timer */
+	// Set to epwm
+	TPM1->SC &= ~((
+	  TPM_SC_CMOD_MASK) | (TPM_SC_PS_MASK)
+	);
 	TPM1->SC|= TPM_SC_PS(7);
-	/* Select counter increment on counter clock */
 	TPM1->SC |= TPM_SC_CMOD(1);
-	
-	/* Select counter to operate in up counting mode */
 	TPM1->SC &= ~(TPM_SC_CPWMS_MASK);
-
-	/* Determine EPWM period */
 	TPM1->MOD = pwn_period;
-	
-  /* Set timer to EPWM mode for PTB0 */
-	TPM1_C0SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
-	TPM1_C0SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
-	
-  /* Set timer to EPWM mode for PTB1 */
-	TPM1_C1SC &= ~((TPM_CnSC_ELSB_MASK) | (TPM_CnSC_ELSA_MASK) | (TPM_CnSC_MSB_MASK) | (TPM_CnSC_MSA_MASK));
-	TPM1_C1SC |= (TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1));
-	
-	/* Determine pulse width (duty cycle) */
+	TPM1_C0SC &= ~(
+	  (TPM_CnSC_ELSB_MASK) | 
+	  (TPM_CnSC_ELSA_MASK) | 
+	  (TPM_CnSC_MSB_MASK) | 
+	  (TPM_CnSC_MSA_MASK)
+	);
+	TPM1_C0SC |= (
+	  TPM_CnSC_ELSB(1) | TPM_CnSC_MSB(1)
+	);
 	TPM1_C0V = pwm_duty_cycle;
-	TPM1_C1V = pwm_duty_cycle;
 };
 
 int play_main_theme(int counter, float dc) {
 	const int ps = 128;
-	const int pwm_period = calculate_audio_period(CLOCK_FREQ, main_theme_melody[counter], ps); 
-  const int pwm_duty_cycle = calculate_audio_duty_cycle(CLOCK_FREQ, main_theme_melody[counter], ps, dc); 	
+	
+	const int pwm_period = calculate_audio_period(
+		CLOCK_FREQ, main_theme_melody[counter], ps); 
+  const int pwm_duty_cycle = calculate_audio_duty_cycle(
+		CLOCK_FREQ, main_theme_melody[counter], ps, dc); 	
+	
 	audio_init(pwm_period, pwm_duty_cycle);
+	
 	int note_duration = 1000 / main_theme_tempo[counter];
 	int pause_between_notes = note_duration * 1.30;
 	return pause_between_notes;
@@ -186,9 +171,14 @@ int play_main_theme(int counter, float dc) {
 
 int play_underworld(int counter, float dc) {
 	const int ps = 128;
-	const int pwm_period = calculate_audio_period(CLOCK_FREQ, underworld_melody[counter], ps); 
-  const int pwm_duty_cycle = calculate_audio_duty_cycle(CLOCK_FREQ, underworld_melody[counter], ps, dc); 	
+	
+	const int pwm_period = calculate_audio_period(
+		CLOCK_FREQ, underworld_melody[counter], ps); 
+  const int pwm_duty_cycle = calculate_audio_duty_cycle(
+		CLOCK_FREQ, underworld_melody[counter], ps, dc);
+ 	
 	audio_init(pwm_period, pwm_duty_cycle);
+	
 	int note_duration = 1000 / underworld_tempo[counter];
 	int pause_between_notes = note_duration * 1.30;
 	return pause_between_notes;
@@ -196,9 +186,14 @@ int play_underworld(int counter, float dc) {
 
 int play_game_over(int counter, float dc) {
 	const int ps = 128;
-	const int pwm_period = calculate_audio_period(CLOCK_FREQ, game_over_melody[counter], ps); 
-  const int pwm_duty_cycle = calculate_audio_duty_cycle(CLOCK_FREQ, game_over_melody[counter], ps, dc); 	
+	
+	const int pwm_period = calculate_audio_period(
+		CLOCK_FREQ, game_over_melody[counter], ps); 
+  const int pwm_duty_cycle = calculate_audio_duty_cycle(
+		CLOCK_FREQ, game_over_melody[counter], ps, dc); 	
+	
 	audio_init(pwm_period, pwm_duty_cycle);
+	
 	int note_duration = 1000 / game_over_tempo[counter];
 	int pause_between_notes = note_duration * 1.30;
 	return pause_between_notes;

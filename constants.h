@@ -60,6 +60,21 @@
 #define LED_PTE29 29
 #define LED_PTE30 30
 
+// robot states
+typedef enum {
+	ROBOT_STATE_STOP,
+	ROBOT_STATE_MOVE,
+	ROBOT_STATE_START,
+	ROBOT_STATE_END,
+} robot_state_t;
+
+extern robot_state_t ROBOT_STATE;
+
+// debugging
+#define LED_RED_PIN 18 
+#define LED_GREEN_PIN 19 
+#define LED_BLUE_PIN 1 
+
 // misc
 #define CLOCK_FREQ 48000000
 #define MASK(x) (1 << (x))
