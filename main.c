@@ -23,11 +23,10 @@ void tMotorControl(void *argument) {
 void tRedLED(void *argument) {
 	red_led_init();
 	while(1) {
+		red_led_toggle();
 		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
-		  red_led_toggle();
 		  osDelay(RED_LED_MOVE_DELAY);
 		} else {
-		  red_led_toggle();
 		  osDelay(RED_LED_STOP_DELAY);
 		}
 	};
@@ -35,14 +34,17 @@ void tRedLED(void *argument) {
 
 void tGreenLED(void *argument) {
 	green_led_init();
+	int counter = 0;
 	while(1) {
 		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
-		  green_led_running();
-		  osDelay(GREEN_LED_DELAY);
+			counter = counter % 10;
+		  green_led_running(counter);
+			counter += 1;
 		} else {
 		  green_led_on();
-		  osDelay(GREEN_LED_DELAY);
+			counter = 0;
 		}
+		osDelay(GREEN_LED_DELAY);
 	};
 }
 
@@ -53,13 +55,19 @@ void tAudio(void *argument) {
 	
 	while (1) {
 		counter = counter % n_notes;
-		int pause_between_notes = play_main_theme(counter, dc);
+		int pause_between_notes = 0;
+		if (ROBOT_STATE == ROBOT_STATE_START) {
+			pause_between_notes = play_underworld(counter, dc);
+		} else if (ROBOT_STATE == ROBOT_STATE_END) {
+			pause_between_notes = play_game_over(counter, dc);
+		} else {
+			pause_between_notes = play_main_theme(counter, dc);
+		}
     osDelay(pause_between_notes);
 		counter += 1;
 	}
 }
 
-// Supply power to ports
 void clock_gating_init() {
 	SIM->SCGC5 |= (
 		(SIM_SCGC5_PORTA_MASK) |
@@ -70,20 +78,15 @@ void clock_gating_init() {
 	);
 }
 
-// Supply power to timers
 void timer_gating_init () {
-	/* Select MCGFLLCLK as timer counter clock */
+	/* select mcgfliclk as timer counter clock */
 	SIM->SOPT2 &= ~SIM_SOPT2_TPMSRC_MASK;
 	SIM->SOPT2 |= SIM_SOPT2_TPMSRC(1);
 	
-  /* Enable clock to TPM0 */
 	SIM->SCGC6 |= SIM_SCGC6_TPM0_MASK;
-	/* Enable clock to TPM1 */
 	SIM->SCGC6 |= SIM_SCGC6_TPM1_MASK;  
-	/* Enable clock to TPM1 */
 	SIM->SCGC6 |= SIM_SCGC6_TPM2_MASK;  
 	
-  /* Enable clock to PIT */	
   SIM_SCGC6 |= SIM_SCGC6_PIT_MASK;
 }
 

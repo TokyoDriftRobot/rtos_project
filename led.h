@@ -3,7 +3,7 @@
 #define GREEN_LED_DELAY 100
 
 void green_led_init(void);
-void green_led_running(void);
+void green_led_running(int);
 void green_led_on(void);
 void red_led_init(void);
 void red_led_toggle(void);
