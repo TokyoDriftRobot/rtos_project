@@ -81,6 +81,20 @@ void tAudio(void *argument) {
 	}
 }
 
+void tDebug(void *argument) {
+	debug_led_init();
+	debug_led_blue_on();
+	while(1) {
+		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+			debug_led_green_on();
+		} else if (ROBOT_STATE == ROBOT_STATE_INIT || ROBOT_STATE == ROBOT_STATE_END) {
+			debug_led_blue_on();
+		} else {
+			debug_led_red_on();
+		}
+	}
+}
+
 void clock_gating_init() {
 	SIM->SCGC4 |= SIM_SCGC4_UART2_MASK;
 	
@@ -116,6 +130,7 @@ int main(void) {
 	osThreadNew(tRedLED, NULL, NULL);
 	osThreadNew(tGreenLED, NULL, NULL);
 	osThreadNew(tAudio, NULL, NULL);
+	osThreadNew(tDebug, NULL, NULL);
 	
 	osKernelStart();
 	while(1);

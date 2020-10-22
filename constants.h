@@ -38,7 +38,7 @@
 
 // port d pins
 #define LED_PTD0 0
-#define LED_PTD1 1
+#define LED_PTD1 1 // debug pin
 #define LED_PTD2 2
 #define LED_PTD3 3
 #define LED_PTD4 4 // green led
@@ -86,3 +86,9 @@ extern volatile robot_direction_t ROBOT_DIRECTION;
 // misc
 #define CLOCK_FREQ 48000000
 #define MASK(x) (1 << (x))
+
+void debug_led_init(void);
+void debug_led_off(void);
+void debug_led_red_on(void);
+void debug_led_blue_on(void);
+void debug_led_green_on(void);
