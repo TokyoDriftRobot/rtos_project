@@ -32,27 +32,33 @@ void UART2_IRQHandler(void) {
 		int rx_data = UART2->D;
 		if (rx_data == 0) { // start
       ROBOT_STATE = ROBOT_STATE_START;
-		} else if (rx_data == 1) { // stop
-      ROBOT_STATE = ROBOT_STATE_STOP;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
-		} else if (rx_data == 2) { // forward
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
-		} else if (rx_data == 3) {  // left
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_LEFT;
-		} else if (rx_data == 4) { // right
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_RIGHT;
-		} else if (rx_data == 5) { // backward
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD;
-		} else if (rx_data == 6) { // done
+		} else if (rx_data == 1) { // done
 			ROBOT_STATE = ROBOT_STATE_END;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+		} else if (rx_data == 2) { // stop
+      ROBOT_STATE = ROBOT_STATE_STOP;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+		} else if (rx_data == 3) { // forward straight
+			ROBOT_STATE = ROBOT_STATE_MOVE;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+		} else if (rx_data == 4) { // forward left
+			ROBOT_STATE = ROBOT_STATE_MOVE;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_LEFT;			
+		} else if (rx_data == 5) { // forward right
+			ROBOT_STATE = ROBOT_STATE_MOVE;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_RIGHT;			
+		} else if (rx_data == 6) { // backward straight
+			ROBOT_STATE = ROBOT_STATE_MOVE;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD_STRAIGHT;			
+		} else if (rx_data == 7) { // backward left
+			ROBOT_STATE = ROBOT_STATE_MOVE;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD_LEFT;			
+		} else if (rx_data == 8) { // backward right
+			ROBOT_STATE = ROBOT_STATE_MOVE;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD_RIGHT;			
 		} else {
 			ROBOT_STATE = ROBOT_STATE_STOP;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD;
+			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
 		}
 	}
 }

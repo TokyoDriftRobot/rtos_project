@@ -28,8 +28,8 @@
 #define LED_PTC6 6
 #define LED_PTC7 7
 #define LED_PTC8 8 // green led
-#define LED_PTC9 9 // gteen led
-#define LED_PTC10 10
+#define LED_PTC9 9 // green led
+#define LED_PTC10 10 // green led 
 #define LED_PTC11 11
 #define LED_PTC12 12
 #define LED_PTC13 13
@@ -37,12 +37,12 @@
 #define LED_PTC17 17
 
 // port d pins
-#define LED_PTD0 0
+#define LED_PTD0 0 // 
 #define LED_PTD1 1 // debug pin
-#define LED_PTD2 2
-#define LED_PTD3 3
-#define LED_PTD4 4 // green led
-#define LED_PTD5 5
+#define LED_PTD2 2 // left motor
+#define LED_PTD3 3 // left motor
+#define LED_PTD4 4 // right motor
+#define LED_PTD5 5 // right motor
 #define LED_PTD6 6
 #define LED_PTD7 7
 
@@ -51,10 +51,10 @@
 #define LED_PTE1 1
 #define LED_PTE2 2 // red led
 #define LED_PTE3 3
-#define LED_PTE4 4 // left motor
-#define LED_PTE5 5 // left motor
-#define LED_PTE20 20 // right motor
-#define LED_PTE21 21 // right motor
+#define LED_PTE4 4 
+#define LED_PTE5 5 
+#define LED_PTE20 20 
+#define LED_PTE21 21
 #define LED_PTE22 22 // uart tx pin
 #define LED_PTE23 23 // uart rx pin
 #define LED_PTE29 29 // red led
@@ -69,10 +69,12 @@ typedef enum {
 	ROBOT_STATE_END,
 } robot_state_t;
 typedef enum {
-	ROBOT_DIRECTION_LEFT,
-	ROBOT_DIRECTION_RIGHT,
-	ROBOT_DIRECTION_FORWARD,
-	ROBOT_DIRECTION_BACKWARD
+	ROBOT_DIRECTION_FORWARD_STRAIGHT,
+	ROBOT_DIRECTION_FORWARD_LEFT,
+	ROBOT_DIRECTION_FORWARD_RIGHT,
+	ROBOT_DIRECTION_BACKWARD_STRAIGHT,
+	ROBOT_DIRECTION_BACKWARD_LEFT,
+	ROBOT_DIRECTION_BACKWARD_RIGHT,
 } robot_direction_t;
 
 extern volatile robot_state_t ROBOT_STATE;

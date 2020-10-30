@@ -9,8 +9,8 @@ void green_led_init() {
 	PORTA->PCR[LED_PTA2] &= ~PORT_PCR_MUX_MASK;
 	PORTA->PCR[LED_PTA2] |= PORT_PCR_MUX(1);
 
-	PORTD->PCR[LED_PTD4] &= ~PORT_PCR_MUX_MASK;
-	PORTD->PCR[LED_PTD4] |= PORT_PCR_MUX(1);
+	PORTC->PCR[LED_PTC10] &= ~PORT_PCR_MUX_MASK;
+	PORTC->PCR[LED_PTC10] |= PORT_PCR_MUX(1);
 
 	PORTA->PCR[LED_PTA12] &= ~PORT_PCR_MUX_MASK;
 	PORTA->PCR[LED_PTA12] |= PORT_PCR_MUX(1);
@@ -36,7 +36,7 @@ void green_led_init() {
 	// Set pins to output
 	PTA->PDDR |= MASK(LED_PTA1);
 	PTA->PDDR |= MASK(LED_PTA2);
-	PTD->PDDR |= MASK(LED_PTD4);
+	PTC->PDDR |= MASK(LED_PTC10);
 	PTA->PDDR |= MASK(LED_PTA12);
 	PTA->PDDR |= MASK(LED_PTA4);
 	PTA->PDDR |= MASK(LED_PTA5);
@@ -61,9 +61,9 @@ void green_led_running(int counter) {
 	  PTA->PDOR &= ~MASK(LED_PTA2);
 	}
 	if (counter == 2) {
-	  PTD->PDOR |= MASK(LED_PTD4);
+	  PTC->PDOR |= MASK(LED_PTC10);
 	} else {
-	  PTD->PDOR &= ~MASK(LED_PTD4);
+	  PTC->PDOR &= ~MASK(LED_PTC10);
 	}
 	if (counter == 3) {
 	  PTA->PDOR |= MASK(LED_PTA12);
@@ -105,7 +105,7 @@ void green_led_running(int counter) {
 void green_led_on() {
 	PTA->PDOR |= MASK(LED_PTA1);
 	PTA->PDOR |= MASK(LED_PTA2);
-	PTD->PDOR |= MASK(LED_PTD4);
+	PTC->PDOR |= MASK(LED_PTC10);
 	PTA->PDOR |= MASK(LED_PTA12);
 	PTA->PDOR |= MASK(LED_PTA4);
 	PTA->PDOR |= MASK(LED_PTA5);
