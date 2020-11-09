@@ -18,22 +18,22 @@ void tBrain(void *argument) {
 void tMotorControl(void *argument) {
 	motor_init();
 	while(1) {
-	if (ROBOT_STATE == ROBOT_STATE_MOVE) {
-		if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_STRAIGHT) {
-			motor_forward_straight();
-		} else if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_LEFT) {
-			motor_forward_left();
-		} else if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_RIGHT) {
-			motor_forward_right();
-		} else if (ROBOT_DIRECTION == ROBOT_DIRECTION_BACKWARD_STRAIGHT) {
-			motor_backward_straight();
-		} else if (ROBOT_DIRECTION == ROBOT_DIRECTION_BACKWARD_LEFT) {
-			motor_backward_left();
-		} else if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_RIGHT) {
-			motor_backward_right();
-		} else {
-			motor_stop();
-		}
+    if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+		  if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_STRAIGHT) {
+			  motor_forward_straight();
+		  } else if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_LEFT) {
+			  motor_forward_left();
+		  } else if (ROBOT_DIRECTION == ROBOT_DIRECTION_FORWARD_RIGHT) {
+			  motor_forward_right();
+		  } else if (ROBOT_DIRECTION == ROBOT_DIRECTION_BACKWARD_STRAIGHT) {
+			  motor_backward_straight();
+		  } else if (ROBOT_DIRECTION == ROBOT_DIRECTION_BACKWARD_LEFT) {
+			  motor_backward_left();
+		  } else if (ROBOT_DIRECTION == ROBOT_DIRECTION_BACKWARD_RIGHT) {
+			  motor_backward_right();
+		  } else {
+			  motor_stop();
+		  }
 	} else {
 		motor_stop();
 	}

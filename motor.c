@@ -13,8 +13,8 @@ int calculate_motor_duty_cycle(
 }  
 
 void motor_init() {
-	int ps = 128;
-	int freq = 2000;
+	int ps = MOTOR_PS;
+	int freq = MOTOR_FREQ;
 	
 	int pwm_period = calculate_motor_period(
 		CLOCK_FREQ, freq, ps); 
@@ -83,12 +83,12 @@ void motor_init() {
 
 
 void motor_control(
-	int lf_out, int rf_out, int lb_out, int rb_out) {
+	int a1, int a2, int b1, int b2) {
 	// high for channels to drive car forward else low
-	TPM0_C2V = lf_out;
-	TPM0_C3V = lb_out;
-	TPM0_C4V = rf_out;
-	TPM0_C5V = rb_out;
+	TPM0_C2V = a1;
+	TPM0_C3V = a2;
+	TPM0_C4V = b1;
+	TPM0_C5V = b2;
 }
 
 
@@ -97,39 +97,39 @@ void motor_forward_straight() {
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
   int right_dc = calculate_motor_duty_cycle(
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
-	motor_control(left_dc, MOTOR_DC0, right_dc, MOTOR_DC0);
+	motor_control(MOTOR_DC0, left_dc, right_dc, MOTOR_DC0);
 }
 
 void motor_forward_left() {
   int left_dc = calculate_motor_duty_cycle(
-		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HALF); 
-  int right_dc = calculate_motor_duty_cycle(
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
-	motor_control(left_dc, MOTOR_DC0, right_dc, MOTOR_DC0);
+  int right_dc = calculate_motor_duty_cycle(
+		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HALF); 
+	motor_control(MOTOR_DC0, left_dc, right_dc, MOTOR_DC0);
 }
 
 void motor_forward_right() {
   int left_dc = calculate_motor_duty_cycle(
-		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
-  int right_dc = calculate_motor_duty_cycle(
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HALF); 
-	motor_control(left_dc, MOTOR_DC0, right_dc, MOTOR_DC0);
+  int right_dc = calculate_motor_duty_cycle(
+		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
+	motor_control(MOTOR_DC0, left_dc, right_dc, MOTOR_DC0);
 }
 
 void motor_backward_left() {
   int left_dc = calculate_motor_duty_cycle(
-		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HALF); 
-  int right_dc = calculate_motor_duty_cycle(
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
-	motor_control(MOTOR_DC0, left_dc, MOTOR_DC0, right_dc);
+  int right_dc = calculate_motor_duty_cycle(
+		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HALF); 
+	motor_control(left_dc, MOTOR_DC0, MOTOR_DC0, right_dc);
 }
 
 void motor_backward_right() {
   int left_dc = calculate_motor_duty_cycle(
-		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
-  int right_dc = calculate_motor_duty_cycle(
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HALF); 
-	motor_control(MOTOR_DC0, left_dc, MOTOR_DC0, right_dc);
+  int right_dc = calculate_motor_duty_cycle(
+		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
+	motor_control(left_dc, MOTOR_DC0, MOTOR_DC0, right_dc);
 }
 
 void motor_backward_straight() {
@@ -137,7 +137,7 @@ void motor_backward_straight() {
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
   int right_dc = calculate_motor_duty_cycle(
 		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
-	motor_control(MOTOR_DC0, left_dc, MOTOR_DC0, right_dc);
+	motor_control(left_dc, MOTOR_DC0, MOTOR_DC0, right_dc);
 }
 
 void motor_stop() {
