@@ -1,3 +1,6 @@
+#ifndef AUDIO_H
+#define AUDIO_H 
+
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
@@ -102,3 +105,5 @@ extern int game_over_tempo[GAME_OVER_SIZE];
 int play_main_theme(int, float);
 int play_underworld(int, float);
 int play_game_over(int, float);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef MOTOR_H
+#define MOTOR_H
+
 #define MOTOR_PS 128
 #define MOTOR_FREQ 2000
 #define MOTOR_HIGH 0.9
@@ -14,3 +17,5 @@ void motor_backward_right(void);
 void motor_backward_straight(void);
 void motor_init(void);
 void motor_control(int, int, int, int);
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 // port a pins
 #define LED_PTA1 1 // green led
 #define LED_PTA2 2
@@ -94,3 +97,5 @@ void debug_led_off(void);
 void debug_led_red_on(void);
 void debug_led_blue_on(void);
 void debug_led_green_on(void);
+
+#endif
