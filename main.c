@@ -19,18 +19,18 @@ void tBrain(void *argument) {
 void tMotorControl(void *argument) {
 	motor_init();
 	while(1) {
-    if (robotState.cmd == 0x03) {
-		  if (robotState.data == 0x01) {
+    if (robotState.cmd == CMD_MOVE) {
+		  if (robotState.data == MOVE_FOWARD_STRAIGHT) {
 			  motor_forward_straight();
-		  } else if (robotState.data == 0x02) {
+		  } else if (robotState.data == MOVE_FORWARD_LEFT) {
 			  motor_forward_left();
-		  } else if (robotState.data == 0x03) {
+		  } else if (robotState.data == MOVE_FORWARD_RIGHT) {
 			  motor_forward_right();
-		  } else if (robotState.data == 0x04) {
+		  } else if (robotState.data == MOVE_BACKWARD_STRAIGHT) {
 			  motor_backward_straight();
-		  } else if (robotState.data == 0x05) {
+		  } else if (robotState.data == MOVE_BACKWARD_LEFT) {
 			  motor_backward_left();
-		  } else if (robotState.data == 0x06) {
+		  } else if (robotState.data == MOVE_BACKWARD_RIGHT) {
 			  motor_backward_right();
 		  } else {
 			  motor_stop();
@@ -45,13 +45,13 @@ void tRedLED(void *argument) {
 	red_led_init();
 	while(1) {
 		red_led_off();
-		if (robotState.cmd == 0x03) {
+		if (robotState.cmd == CMD_MOVE) {
 		  osDelay(RED_LED_MOVE_DELAY);
 		} else {
 		  osDelay(RED_LED_STOP_DELAY);
 		}
 		red_led_on();
-		if (robotState.cmd == 0x03) {
+		if (robotState.cmd == CMD_MOVE) {
 		  osDelay(RED_LED_MOVE_DELAY);
 		} else {
 		  osDelay(RED_LED_STOP_DELAY);
@@ -63,7 +63,7 @@ void tGreenLED(void *argument) {
 	green_led_init();
 	int counter = 0;
 	while(1) {
-		if (robotState.cmd == 0x03) {
+		if (robotState.cmd == CMD_MOVE) {
 			counter = counter % 8;
 		  green_led_running(counter);
 			counter += 1;
@@ -81,11 +81,11 @@ void tAudio(void *argument) {
 	const float dc = 0.1;
 	
 	while (1) {
-		if (robotState.cmd == 0x00) {
+		if (robotState.cmd == CMD_INIT) {
 			continue;
-		} else if (robotState.cmd == 0x01) {
+		} else if (robotState.cmd == CMD_START) {
 		  n_notes = UNDERWORLD_SIZE;
-		} else if (robotState.cmd == 0x04) {
+		} else if (robotState.cmd == CMD_END) {
 			n_notes = GAME_OVER_SIZE;
 		} else {
 			n_notes = MAIN_THEME_SIZE;
@@ -93,9 +93,9 @@ void tAudio(void *argument) {
 		
 		counter = counter % n_notes;
 		int pause_between_notes = 0;
-		if (robotState.cmd == 0x01) {
+		if (robotState.cmd == CMD_START) {
 			pause_between_notes = play_underworld(counter, dc);
-		} else if (robotState.cmd == 0x04) {
+		} else if (robotState.cmd == CMD_END) {
 			pause_between_notes = play_game_over(counter, dc);
 		} else {
 			pause_between_notes = play_main_theme(counter, dc);
@@ -144,8 +144,8 @@ int main(void) {
 	clock_gating_init();
 	timer_gating_init();
 	
-	robotState.cmd = 0x00;
-	robotState.data = 0x00;
+	robotState.cmd = CMD_INIT;
+	robotState.data = MOVE_STOP;
 	
 	osKernelInitialize();
 	

@@ -33,44 +33,44 @@ void UART2_IRQHandler(void) {
 	if (UART2->S1 & UART_S1_RDRF_MASK) {
 		int rx_data = UART2->D;
 		if (rx_data == 0) { // start
-				myData.cmd = 0x01;
-	      myData.data = 0x00;
+				myData.cmd = CMD_START;
+	      myData.data = MOVE_STOP;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 1) { // done
-				myData.cmd = 0x04;
-	      myData.data = 0x00;
+				myData.cmd = CMD_END;
+	      myData.data = MOVE_STOP;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 2) { // stop
-				myData.cmd = 0x02;
-	      myData.data = 0x00;
+				myData.cmd = CMD_STOP;
+	      myData.data = MOVE_STOP;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 3) { // forward straight
-				myData.cmd = 0x03;
-	      myData.data = 0x01;
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_FOWARD_STRAIGHT;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 4) { // forward left
-				myData.cmd = 0x03;
-	      myData.data = 0x02;
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_FORWARD_LEFT;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);		
 		} else if (rx_data == 5) { // forward right
-				myData.cmd = 0x03;
-	      myData.data = 0x03;
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_FORWARD_RIGHT;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);	
 		} else if (rx_data == 6) { // backward straight
-				myData.cmd = 0x03;
-	      myData.data = 0x04;
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_BACKWARD_STRAIGHT;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);			
 		} else if (rx_data == 7) { // backward left
-				myData.cmd = 0x03;
-	      myData.data = 0x05;
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_BACKWARD_LEFT;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);		
 		} else if (rx_data == 8) { // backward right
-				myData.cmd = 0x03;
-	      myData.data = 0x06;
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_BACKWARD_RIGHT;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);		
 		} else {
-				myData.cmd = 0x02;
-	      myData.data = 0x00;
+				myData.cmd = CMD_STOP;
+	      myData.data = MOVE_STOP;
        osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		}
 	}

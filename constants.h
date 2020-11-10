@@ -66,8 +66,23 @@
 #define LED_PTE23 23 // uart rx pin
 #define LED_PTE29 29 // red led
 #define LED_PTE30 30 // red led
-	
+
 // robot states
+
+#define CMD_INIT 0x00
+#define CMD_START 0x01
+#define CMD_STOP 0x02
+#define CMD_MOVE 0x03
+#define CMD_END 0x04
+
+#define MOVE_STOP 0x00
+#define MOVE_FOWARD_STRAIGHT 0x01
+#define MOVE_FORWARD_LEFT 0x02
+#define MOVE_FORWARD_RIGHT 0x03
+#define MOVE_BACKWARD_STRAIGHT 0x04
+#define MOVE_BACKWARD_LEFT 0x05
+#define MOVE_BACKWARD_RIGHT 0x06
+
 typedef struct {
 	uint8_t cmd;
 	uint8_t data;
