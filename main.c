@@ -10,6 +10,8 @@
 uint32_t MSG_COUNT = 1;
 volatile osMessageQueueId_t dataMsg;
 volatile myDataPkt robotState;
+osEventFlagsId_t connect_flag;
+osMutexId_t myMutex;
 
 void tBrain(void *argument) {
 	bluetooth_init(BAUD_RATE);
@@ -63,6 +65,7 @@ void tGreenLED(void *argument) {
 	green_led_init();
 	int counter = 0;
 	while(1) {
+		osMutexAcquire(myMutex, osWaitForever);
 		if (robotState.cmd == CMD_MOVE) {
 			counter = counter % 8;
 		  green_led_running(counter);
@@ -72,6 +75,7 @@ void tGreenLED(void *argument) {
 			counter = 0;
 		}
 		osDelay(GREEN_LED_DELAY);
+		osMutexRelease(myMutex);
 	};
 }
 
@@ -112,6 +116,25 @@ void tDecodeMsg(void *argument) {
 	while (1) {
 		osMessageQueueGet(dataMsg, &myData, NULL, osWaitForever);
 		robotState = myData;
+		
+		if (myData.cmd == CMD_START) {
+			osEventFlagsSet(connect_flag, CONNECT_FLAG);
+		}
+	}
+}
+
+void tConnect(void *argument) {
+	while (1) {
+		osEventFlagsWait(connect_flag, CONNECT_FLAG, osFlagsWaitAny, osWaitForever);
+		osMutexAcquire(myMutex, osWaitForever);
+		green_led_off();
+		osDelay(1000);
+		green_led_on();
+		osDelay(1000);
+		green_led_off();
+		osDelay(1000);
+		green_led_on();
+		osMutexRelease(myMutex);
 	}
 }
 
@@ -155,9 +178,12 @@ int main(void) {
 	osThreadNew(tGreenLED, NULL, NULL);
 	osThreadNew(tAudio, NULL, NULL);
 	osThreadNew(tDecodeMsg, NULL, NULL);
+	osThreadNew(tConnect, NULL, NULL);
 	
+	myMutex = osMutexNew(NULL);
 	dataMsg = osMessageQueueNew(MSG_COUNT, sizeof(myDataPkt), NULL);
-
+  connect_flag = osEventFlagsNew(NULL);
+	
 	osKernelStart();
 	while(1);
 }

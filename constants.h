@@ -67,8 +67,9 @@
 #define LED_PTE29 29 // red led
 #define LED_PTE30 30 // red led
 
-// robot states
+#define CONNECT_FLAG 0x0001
 
+// robot states
 #define CMD_INIT 0x00
 #define CMD_START 0x01
 #define CMD_STOP 0x02
