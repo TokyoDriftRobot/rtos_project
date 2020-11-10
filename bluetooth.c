@@ -28,37 +28,50 @@ void bluetooth_init(uint32_t baud_rate) {
 
 void UART2_IRQHandler(void) {
 	NVIC_ClearPendingIRQ(UART2_IRQn);
+	myDataPkt myData;
+	
 	if (UART2->S1 & UART_S1_RDRF_MASK) {
 		int rx_data = UART2->D;
 		if (rx_data == 0) { // start
-      ROBOT_STATE = ROBOT_STATE_START;
+				myData.cmd = 0x01;
+	      myData.data = 0x00;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 1) { // done
-			ROBOT_STATE = ROBOT_STATE_END;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+				myData.cmd = 0x04;
+	      myData.data = 0x00;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 2) { // stop
-      ROBOT_STATE = ROBOT_STATE_STOP;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+				myData.cmd = 0x02;
+	      myData.data = 0x00;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 3) { // forward straight
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+				myData.cmd = 0x03;
+	      myData.data = 0x01;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		} else if (rx_data == 4) { // forward left
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_LEFT;			
+				myData.cmd = 0x03;
+	      myData.data = 0x02;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);		
 		} else if (rx_data == 5) { // forward right
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_RIGHT;			
+				myData.cmd = 0x03;
+	      myData.data = 0x03;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);	
 		} else if (rx_data == 6) { // backward straight
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD_STRAIGHT;			
+				myData.cmd = 0x03;
+	      myData.data = 0x04;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);			
 		} else if (rx_data == 7) { // backward left
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD_LEFT;			
+				myData.cmd = 0x03;
+	      myData.data = 0x05;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);		
 		} else if (rx_data == 8) { // backward right
-			ROBOT_STATE = ROBOT_STATE_MOVE;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_BACKWARD_RIGHT;			
+				myData.cmd = 0x03;
+	      myData.data = 0x06;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);		
 		} else {
-			ROBOT_STATE = ROBOT_STATE_STOP;
-			ROBOT_DIRECTION = ROBOT_DIRECTION_FORWARD_STRAIGHT;
+				myData.cmd = 0x02;
+	      myData.data = 0x00;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);
 		}
 	}
 }

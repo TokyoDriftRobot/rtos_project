@@ -1,6 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <MKL25Z4.h> 
+#include <RTE_Components.h>
+#include <cmsis_os2.h>
+
 // port a pins
 #define LED_PTA1 1 // green led
 #define LED_PTA2 2
@@ -62,26 +66,17 @@
 #define LED_PTE23 23 // uart rx pin
 #define LED_PTE29 29 // red led
 #define LED_PTE30 30 // red led
-
+	
 // robot states
-typedef enum {
-	ROBOT_STATE_INIT,
-	ROBOT_STATE_STOP,
-	ROBOT_STATE_MOVE,
-	ROBOT_STATE_START,
-	ROBOT_STATE_END,
-} robot_state_t;
-typedef enum {
-	ROBOT_DIRECTION_FORWARD_STRAIGHT,
-	ROBOT_DIRECTION_FORWARD_LEFT,
-	ROBOT_DIRECTION_FORWARD_RIGHT,
-	ROBOT_DIRECTION_BACKWARD_STRAIGHT,
-	ROBOT_DIRECTION_BACKWARD_LEFT,
-	ROBOT_DIRECTION_BACKWARD_RIGHT,
-} robot_direction_t;
+typedef struct {
+	uint8_t cmd;
+	uint8_t data;
+} myDataPkt;
 
-extern volatile robot_state_t ROBOT_STATE;
-extern volatile robot_direction_t ROBOT_DIRECTION;
+extern uint32_t MSG_COUNT;
+extern volatile osMessageQueueId_t dataMsg;
+
+extern volatile myDataPkt cmd;
 
 // debugging
 #define LED_RED_PIN 18 
