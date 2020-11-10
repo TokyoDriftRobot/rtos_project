@@ -7,3 +7,5 @@ void green_led_running(int);
 void green_led_on(void);
 void red_led_init(void);
 void red_led_toggle(void);
+void red_led_off(void);
+void red_led_on(void);

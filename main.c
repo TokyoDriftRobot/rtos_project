@@ -43,7 +43,13 @@ void tMotorControl(void *argument) {
 void tRedLED(void *argument) {
 	red_led_init();
 	while(1) {
-		red_led_toggle();
+		red_led_off();
+		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
+		  osDelay(RED_LED_MOVE_DELAY);
+		} else {
+		  osDelay(RED_LED_STOP_DELAY);
+		}
+		red_led_on();
 		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
 		  osDelay(RED_LED_MOVE_DELAY);
 		} else {
@@ -57,7 +63,7 @@ void tGreenLED(void *argument) {
 	int counter = 0;
 	while(1) {
 		if (ROBOT_STATE == ROBOT_STATE_MOVE) {
-			counter = counter % 10;
+			counter = counter % 8;
 		  green_led_running(counter);
 			counter += 1;
 		} else {
@@ -150,7 +156,7 @@ int main(void) {
 	osThreadNew(tRedLED, NULL, NULL);
 	osThreadNew(tGreenLED, NULL, NULL);
 	osThreadNew(tAudio, NULL, NULL);
-	osThreadNew(tDebug, NULL, NULL);
+//	osThreadNew(tDebug, NULL, NULL);
 	
 	osKernelStart();
 	while(1);
