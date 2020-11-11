@@ -2,7 +2,7 @@
 #define MOTOR_H
 
 #define MOTOR_PS 128
-#define MOTOR_FREQ 2000
+#define MOTOR_FREQ 400
 #define MOTOR_HIGH 0.9
 #define MOTOR_HALF 0.3
 #define MOTOR_LOW 0
