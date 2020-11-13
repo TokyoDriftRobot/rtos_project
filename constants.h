@@ -83,6 +83,8 @@
 #define MOVE_BACKWARD_STRAIGHT 0x04
 #define MOVE_BACKWARD_LEFT 0x05
 #define MOVE_BACKWARD_RIGHT 0x06
+#define MOVE_STATIONARY_LEFT 0x07
+#define MOVE_STATIONARY_RIGHT 0x08
 
 typedef struct {
 	uint8_t cmd;

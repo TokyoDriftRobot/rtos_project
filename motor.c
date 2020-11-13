@@ -140,6 +140,19 @@ void motor_backward_straight() {
 	motor_control(left_dc, MOTOR_DC0, MOTOR_DC0, right_dc);
 }
 
+void motor_stationary_left() {
+  int right_dc = calculate_motor_duty_cycle(
+		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
+	motor_control(MOTOR_DC0, MOTOR_DC0, MOTOR_DC0, right_dc);
+}
+
+void motor_stationary_right() {
+  int left_dc = calculate_motor_duty_cycle(
+		CLOCK_FREQ, MOTOR_FREQ, MOTOR_PS, MOTOR_HIGH); 
+	motor_control(left_dc, MOTOR_DC0, MOTOR_DC0, MOTOR_DC0);
+}
+
+
 void motor_stop() {
 	motor_control(MOTOR_DC0, MOTOR_DC0, MOTOR_DC0, MOTOR_DC0);
 }

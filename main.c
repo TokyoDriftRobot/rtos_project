@@ -34,6 +34,10 @@ void tMotorControl(void *argument) {
 			  motor_backward_left();
 		  } else if (robotState.data == MOVE_BACKWARD_RIGHT) {
 			  motor_backward_right();
+		  } else if (robotState.data == MOVE_STATIONARY_LEFT) {
+			  motor_stationary_left();
+		  } else if (robotState.data == MOVE_STATIONARY_RIGHT) {
+			  motor_stationary_right();
 		  } else {
 			  motor_stop();
 		  }

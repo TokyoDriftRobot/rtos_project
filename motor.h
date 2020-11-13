@@ -17,5 +17,7 @@ void motor_backward_right(void);
 void motor_backward_straight(void);
 void motor_init(void);
 void motor_control(int, int, int, int);
+void motor_stationary_left(void);
+void motor_stationary_right(void);
 
 #endif

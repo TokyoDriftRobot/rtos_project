@@ -67,7 +67,15 @@ void UART2_IRQHandler(void) {
 		} else if (rx_data == 8) { // backward right
 				myData.cmd = CMD_MOVE;
 	      myData.data = MOVE_BACKWARD_RIGHT;
-       osMessageQueuePut(dataMsg, &myData, NULL, 0);		
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);	
+		} else if (rx_data == 9) { // stationary left
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_STATIONARY_LEFT;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);	
+		} else if (rx_data == 10) { // stationary right
+				myData.cmd = CMD_MOVE;
+	      myData.data = MOVE_STATIONARY_RIGHT;
+       osMessageQueuePut(dataMsg, &myData, NULL, 0);				
 		} else {
 				myData.cmd = CMD_STOP;
 	      myData.data = MOVE_STOP;
